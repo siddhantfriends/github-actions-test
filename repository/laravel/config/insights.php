@@ -2,19 +2,23 @@
 
 declare(strict_types=1);
 
-use NunoMaduro\PhpInsights\Domain\Insights\ForbiddenDefineFunctions;
-use NunoMaduro\PhpInsights\Domain\Insights\ForbiddenFinalClasses;
+use NunoMaduro\PhpInsights\Domain\Insights\CyclomaticComplexityIsHigh;
 use NunoMaduro\PhpInsights\Domain\Insights\ForbiddenNormalClasses;
-use NunoMaduro\PhpInsights\Domain\Insights\ForbiddenPrivateMethods;
-use NunoMaduro\PhpInsights\Domain\Insights\ForbiddenTraits;
-use NunoMaduro\PhpInsights\Domain\Metrics\Architecture\Classes;
+use PHP_CodeSniffer\Standards\Generic\Sniffs\Files\LineLengthSniff;
+use PHP_CodeSniffer\Standards\Generic\Sniffs\Formatting\SpaceAfterCastSniff;
+use PHP_CodeSniffer\Standards\Generic\Sniffs\Formatting\SpaceAfterNotSniff;
+use PhpCsFixer\Fixer\ClassNotation\OrderedClassElementsFixer;
+use PhpCsFixer\Fixer\ClassNotation\VisibilityRequiredFixer;
+use PhpCsFixer\Fixer\Comment\NoEmptyCommentFixer;
+use PhpCsFixer\Fixer\Import\OrderedImportsFixer;
+use PhpCsFixer\Fixer\StringNotation\SingleQuoteFixer;
+use SlevomatCodingStandard\Sniffs\Classes\ClassConstantVisibilitySniff;
+use SlevomatCodingStandard\Sniffs\Classes\ForbiddenPublicPropertySniff;
+use SlevomatCodingStandard\Sniffs\Commenting\DocCommentSpacingSniff;
 use SlevomatCodingStandard\Sniffs\Commenting\UselessFunctionDocCommentSniff;
+use SlevomatCodingStandard\Sniffs\ControlStructures\DisallowEmptySniff;
 use SlevomatCodingStandard\Sniffs\Namespaces\AlphabeticallySortedUsesSniff;
 use SlevomatCodingStandard\Sniffs\TypeHints\DeclareStrictTypesSniff;
-use SlevomatCodingStandard\Sniffs\TypeHints\DisallowMixedTypeHintSniff;
-use SlevomatCodingStandard\Sniffs\TypeHints\ParameterTypeHintSniff;
-use SlevomatCodingStandard\Sniffs\TypeHints\PropertyTypeHintSniff;
-use SlevomatCodingStandard\Sniffs\TypeHints\ReturnTypeHintSniff;
 
 return [
 
@@ -51,7 +55,7 @@ return [
     |
     */
 
-    'ide' => null,
+    'ide' => 'phpstorm',
 
     /*
     |--------------------------------------------------------------------------
@@ -65,31 +69,45 @@ return [
     */
 
     'exclude' => [
-        //  'path/to/directory-or-file'
+        'app/Providers',
     ],
 
-    'add' => [
-        Classes::class => [
-            ForbiddenFinalClasses::class,
-        ],
-    ],
+    'add' => [],
 
     'remove' => [
-        AlphabeticallySortedUsesSniff::class,
-        DeclareStrictTypesSniff::class,
-        DisallowMixedTypeHintSniff::class,
-        ForbiddenDefineFunctions::class,
-        ForbiddenNormalClasses::class,
-        ForbiddenTraits::class,
-        ParameterTypeHintSniff::class,
-        PropertyTypeHintSniff::class,
-        ReturnTypeHintSniff::class,
-        UselessFunctionDocCommentSniff::class,
+        // Code
+        DeclareStrictTypesSniff::class,             // Declare strict types
+        ForbiddenPublicPropertySniff::class,        // Forbidden public property
+        VisibilityRequiredFixer::class,             // Visibility required
+        ClassConstantVisibilitySniff::class,        // Class constant visibility
+        DisallowEmptySniff::class,                  // Disallow empty
+        NoEmptyCommentFixer::class,                 // No empty comment
+        UselessFunctionDocCommentSniff::class,      // Useless function doc comment
+
+        // Architecture
+        ForbiddenNormalClasses::class,              // Normal classes are forbidden
+
+        // Style
+        SpaceAfterCastSniff::class,                 // Space after cast
+        SpaceAfterNotSniff::class,                  // Space after not
+        AlphabeticallySortedUsesSniff::class,       // Alphabetically sorted uses
+        DocCommentSpacingSniff::class,              // Doc comment spacing
+        OrderedClassElementsFixer::class,           // Ordered class elements
+        SingleQuoteFixer::class,                    // Single quote
     ],
 
     'config' => [
-        ForbiddenPrivateMethods::class => [
-            'title' => 'The usage of private methods is not idiomatic in Laravel.',
+        CyclomaticComplexityIsHigh::class => [
+            'maxComplexity' => 8,
+        ],
+        LineLengthSniff::class => [
+            'lineLimit' => 120,
+            'absoluteLineLimit' => 120,
+            'ignoreComments' => false,
+        ],
+        OrderedImportsFixer::class => [
+            'imports_order' => ['class', 'const', 'function'],
+            'sort_algorithm' => 'length',
         ],
     ],
 
@@ -105,11 +123,11 @@ return [
     */
 
     'requirements' => [
-//        'min-quality' => 0,
-//        'min-complexity' => 0,
-//        'min-architecture' => 0,
-//        'min-style' => 0,
-//        'disable-security-check' => false,
+        'min-quality' => 75,
+        'min-complexity' => 75,
+        'min-architecture' => 75,
+        'min-style' => 75,
+        'disable-security-check' => false,
     ],
 
     /*
