@@ -39,3 +39,7 @@ jobs:
 
     - name: Run Phpstan
       run: vendor/bin/phpstan analyse
+
+    - name: Run PHP Insights
+      run: |
+        php artisan insights --no-interaction --ansi --format=github-action
