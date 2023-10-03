@@ -1,5 +1,5 @@
 on: push
-name: CI
+name: GitHub Actions Continuous Integration
 jobs:
   phpunit:
     runs-on: ubuntu-latest
@@ -34,4 +34,8 @@ jobs:
  
     - name: Run Testsuite
       run: vendor/bin/phpunit tests/
+      working-directory: repository/laravel
+
+    - name: Run Phpstan
+      run: vendor/bin/phpstan analyse
       working-directory: repository/laravel
