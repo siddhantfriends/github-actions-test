@@ -1,0 +1,38 @@
+version: '3'
+services:
+  nginx:
+    build: ./build/nginx
+    volumes:
+      - ./config/nginx.conf:/etc/nginx/nginx.conf
+      - ./config/conf.d:/etc/nginx/conf.d
+      - ./repository:/var/www/html
+    ports:
+      - 80:80
+    depends_on:
+      - php8
+    networks:
+      default:
+        aliases:
+          - phpinfo8.test
+
+  php8:
+    build: ./build/php8
+    working_dir: /var/www/html
+    volumes:
+      - ./repository:/var/www/html
+
+  mysql:
+    build: ./build/mysql
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+      - ./repository:/var/www/html
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+    networks: 
+      - default
+
+networks:
+  default:
+    driver: bridge
