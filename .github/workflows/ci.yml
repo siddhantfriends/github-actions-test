@@ -1,8 +1,12 @@
 on: push
 name: GitHub Actions Continuous Integration
 jobs:
-  phpunit:
+  laravel:
+    name: Laravel CI Pipeline
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: repository/laravel
     container:
       image: kirschbaumdevelopment/laravel-test-runner:8.2
  
@@ -24,18 +28,14 @@ jobs:
     - name: Install composer dependencies
       run: |
         composer install --no-scripts
-      working-directory: repository/laravel
  
     - name: Prepare Laravel Application
       run: |
         cp .env.ci .env
         php artisan key:generate
-      working-directory: repository/laravel
  
     - name: Run Testsuite
       run: vendor/bin/phpunit tests/
-      working-directory: repository/laravel
 
     - name: Run Phpstan
       run: vendor/bin/phpstan analyse
-      working-directory: repository/laravel
