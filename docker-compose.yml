@@ -14,6 +14,7 @@ services:
       default:
         aliases:
           - phpinfo8.test
+          - laravel.test
 
   php8:
     build: ./build/php8

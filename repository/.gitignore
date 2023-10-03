@@ -1,3 +1,6 @@
 *
 !.gitignore
 !phpinfo
+!phpinfo/**
+!laravel
+!laravel/**

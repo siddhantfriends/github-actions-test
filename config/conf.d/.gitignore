@@ -1,3 +1,4 @@
 *
 !.gitignore
 !phpinfo8.conf
+!laravel.conf
