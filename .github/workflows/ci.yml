@@ -1,8 +1,7 @@
 on: push
 name: GitHub Actions Continuous Integration
 jobs:
-  laravel-setup:
-    name: Laravel Setup
+  phpunit:
     runs-on: ubuntu-latest
     container:
       image: kirschbaumdevelopment/laravel-test-runner:8.2
@@ -32,21 +31,11 @@ jobs:
         cp .env.ci .env
         php artisan key:generate
       working-directory: repository/laravel
-
-  phpunit:
-    name: Testing
-    runs-on: ubuntu-latest
-    needs: laravel-setup
-    steps:
+ 
     - name: Run Testsuite
       run: vendor/bin/phpunit tests/
       working-directory: repository/laravel
 
-  phpstan:  
-    name: Static Code Analysis
-    runs-on: ubuntu-latest
-    needs: laravel-setup
-    steps:
     - name: Run Phpstan
       run: vendor/bin/phpstan analyse
       working-directory: repository/laravel
