@@ -33,7 +33,7 @@ jobs:
       run: |
         cp .env.ci .env
         php artisan key:generate
-        php artisan migrate
+        php artisan migrate --no-interaction
  
     - name: Run Testsuite
       run: php artisan test
