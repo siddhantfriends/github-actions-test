@@ -39,7 +39,7 @@ jobs:
         php artisan migrate --no-interaction --ansi
  
     - name: Run Testsuite
-      run: php artisan test --no-interaction --ansi
+      run: php artisan test --ansi
 
     - name: Run Phpstan
       run: vendor/bin/phpstan analyse
